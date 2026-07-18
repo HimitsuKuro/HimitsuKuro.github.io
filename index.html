@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Himitsu Labs</title>
   <meta name="description" content="Himitsu Labs — studio de jeux vidéo indépendant. Créateur de Jan Ken Panic, jeu d'arcade inspiré du Janken japonais." />
-  <meta name="theme-color" content="#0a100d" />
+  <meta name="theme-color" content="#182a21" />
   <meta property="og:title" content="Himitsu Labs — Indie Game Studio" />
   <meta property="og:description" content="Studio indépendant passionné. Découvrez Jan Ken Panic, notre jeu d'arcade inspiré du Janken japonais." />
   <meta property="og:image" content="https://himitsukuro.github.io/assets/HimitsuLabs.png" />
@@ -16,14 +16,17 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #0a100d;
-      --surface:   #101a15;
-      --surface2:  #16241d;
+      --bg:        #182a21;   /* jade — hero */
+      --tint-projects: #14262e;   /* cyan profond */
+      --tint-about:    #2a2216;   /* ambre chaud */
+      --tint-contact:  #221b33;   /* violet nuit */
+      --surface:   rgba(255,255,255,.055);
+      --surface2:  rgba(255,255,255,.095);
       --accent:    #2fe6a6;   /* jade */
       --accent2:   #4ad9ff;   /* cyan */
       --accent3:   #ffd166;   /* or */
       --text:      #eefff7;
-      --muted:     #8aa79a;
+      --muted:     #9db8ab;
       --border:    rgba(47,230,166,.22);
       --glow:      rgba(47,230,166,.35);
     }
@@ -35,6 +38,7 @@
       background: var(--bg);
       color: var(--text);
       overflow-x: hidden;
+      transition: background 1.1s ease;
     }
 
     /* ─── STARS BACKGROUND ─────────────────────────────────────── */
@@ -43,8 +47,8 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(47,230,166,.10) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 30% at 20% 80%, rgba(74,217,255,.06) 0%, transparent 60%);
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(47,230,166,.14) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 20% 80%, rgba(74,217,255,.09) 0%, transparent 60%);
       pointer-events: none;
       z-index: 0;
     }
@@ -58,7 +62,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 14px 40px;
-      background: rgba(10,16,13,.85);
+      background: rgba(16,27,22,.72);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
@@ -112,7 +116,7 @@
         flex-direction: column;
         gap: 20px;
         padding: 24px 0;
-        background: rgba(10,16,13,.97);
+        background: rgba(18,30,24,.97);
         border-bottom: 1px solid var(--border);
         transform: translateY(-130%);
         transition: transform .3s ease;
@@ -828,7 +832,7 @@
   </section>
 
   <!-- ─── ABOUT ─────────────────────────────────────────────────── -->
-  <section id="about" style="background: var(--surface);">
+  <section id="about">
     <div class="about-kanji" aria-hidden="true">秘密</div>
     <div class="section-inner">
       <div class="about-logo-wrap fade-in">
@@ -1021,6 +1025,23 @@
         heroBg.style.transform = `translateY(${window.scrollY * .25}px)`;
       }, { passive: true });
     }
+
+    // ── Teinte du fond selon la section visible ─────────────────
+    const tints = [
+      [document.querySelector('.hero'),      '#182a21'],
+      [document.getElementById('projects'),  '#14262e'],
+      [document.getElementById('about'),     '#2a2216'],
+      [document.getElementById('contact'),   '#221b33'],
+    ];
+    const tintObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const t = tints.find(([el]) => el === e.target);
+          if (t) document.body.style.background = t[1];
+        }
+      });
+    }, { threshold: 0.45 });
+    tints.forEach(([el]) => el && tintObs.observe(el));
 
     // Apparition en cascade des cartes projets
     document.querySelectorAll('.projects-grid .fade-in').forEach((el, i) => {
