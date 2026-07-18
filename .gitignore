@@ -1,0 +1,13 @@
+# Ne JAMAIS pousser — contient le mot de passe d'application Gmail
+server.js
+
+# Inutile en ligne
+node_modules/
+package.json
+package-lock.json
+lancer-serveur.bat
+pousser-site.bat
+
+# Sauvegardes locales
+_logos_violet_backup/
+_check*.png

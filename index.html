@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Himitsu Labs</title>
+  <meta name="description" content="Himitsu Labs — studio de jeux vidéo indépendant. Créateur de Jan Ken Panic, jeu d'arcade inspiré du Janken japonais." />
+  <meta name="theme-color" content="#0a100d" />
+  <meta property="og:title" content="Himitsu Labs — Indie Game Studio" />
+  <meta property="og:description" content="Studio indépendant passionné. Découvrez Jan Ken Panic, notre jeu d'arcade inspiré du Janken japonais." />
+  <meta property="og:image" content="https://himitsukuro.github.io/assets/HimitsuLabs.png" />
+  <meta property="og:url" content="https://himitsukuro.github.io/" />
+  <link rel="icon" href="assets/PtitLogoHimitsuLabs.png" />
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a100d;
+      --surface:   #101a15;
+      --surface2:  #16241d;
+      --accent:    #2fe6a6;   /* jade */
+      --accent2:   #4ad9ff;   /* cyan */
+      --accent3:   #ffd166;   /* or */
+      --text:      #eefff7;
+      --muted:     #8aa79a;
+      --border:    rgba(47,230,166,.22);
+      --glow:      rgba(47,230,166,.35);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─── STARS BACKGROUND ─────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(47,230,166,.10) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 20% 80%, rgba(74,217,255,.06) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── NAV ──────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 40px;
+      background: rgba(10,16,13,.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo img { height: 36px; }
+    .nav-logo span {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .9rem;
+      letter-spacing: .04em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* Burger mobile */
+    .burger {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px 8px;
+    }
+    @media (max-width: 640px) {
+      nav { padding: 12px 18px; }
+      .burger { display: block; }
+      .nav-links {
+        position: fixed;
+        top: 61px; left: 0; right: 0;
+        flex-direction: column;
+        gap: 20px;
+        padding: 24px 0;
+        background: rgba(10,16,13,.97);
+        border-bottom: 1px solid var(--border);
+        transform: translateY(-130%);
+        transition: transform .3s ease;
+      }
+      .nav-links.open { transform: translateY(0); }
+    }
+
+    /* Language toggle */
+    .lang-toggle {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .lang-btn {
+      padding: 5px 14px;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .2s;
+      border: none;
+      background: transparent;
+    }
+    .lang-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 20px 60px;
+      z-index: 1;
+    }
+
+    .hero-logo {
+      width: min(340px, 80vw);
+      margin-bottom: 28px;
+      filter: drop-shadow(0 0 28px var(--glow));
+      animation: floatLogo 4s ease-in-out infinite;
+    }
+
+    @keyframes floatLogo {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    .hero-tagline {
+      font-size: clamp(.9rem, 2vw, 1.1rem);
+      color: var(--muted);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      background: linear-gradient(110deg, #fff 25%, var(--accent) 50%, var(--accent2) 65%, #fff 85%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 18px;
+      animation: sheen 7s ease-in-out infinite;
+    }
+    @keyframes sheen {
+      0%, 100% { background-position: 0% center; }
+      50%      { background-position: 100% center; }
+    }
+
+    /* Glyphes flottants du hero */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: -1;
+    }
+    .hero-bg span {
+      position: absolute;
+      color: var(--accent);
+      opacity: .07;
+      filter: blur(1px);
+      animation: floatGlyph 9s ease-in-out infinite;
+      user-select: none;
+    }
+    .hero-bg span:nth-child(2n) { color: var(--accent2); animation-duration: 11s; }
+    .hero-bg span:nth-child(3n) { animation-delay: -4s; }
+    @keyframes floatGlyph {
+      0%, 100% { transform: translateY(0) rotate(-6deg); }
+      50%      { transform: translateY(-26px) rotate(6deg); }
+    }
+
+    .hero-sub {
+      max-width: 520px;
+      font-size: clamp(.9rem, 2.2vw, 1.05rem);
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      padding: 14px 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 30px;
+      color: #fff;
+      font-weight: 700;
+      font-size: .95rem;
+      letter-spacing: .05em;
+      text-decoration: none;
+      box-shadow: 0 0 24px var(--glow);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px var(--glow);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: .72rem;
+      letter-spacing: .12em;
+      animation: bounce 2s infinite;
+    }
+    .scroll-hint::after {
+      content: '↓';
+      font-size: 1.2rem;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ─── SECTIONS ─────────────────────────────────────────────── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 90px 20px;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      margin-bottom: 50px;
+      color: var(--text);
+    }
+
+    /* ─── PROJECTS ─────────────────────────────────────────────── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 28px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      position: relative;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 48px rgba(47,230,166,.18);
+      border-color: var(--accent);
+    }
+
+    /* Featured card */
+    .project-card.featured {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 0;
+    }
+    @media (max-width: 680px) {
+      .project-card.featured { grid-template-columns: 1fr; }
+    }
+
+    /* ─── SCREENSHOT CAROUSEL ──────────────────────────────────── */
+    .card-visual {
+      background: #000;
+      position: relative;
+      overflow: hidden;
+      min-height: 380px;
+      display: flex;
+      align-items: stretch;
+    }
+
+    .carousel {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform .4s cubic-bezier(.4,0,.2,1);
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 380px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.15);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+      backdrop-filter: blur(4px);
+    }
+    .carousel-btn:hover { background: rgba(47,230,166,.45); }
+    .carousel-btn.prev { left: 10px; }
+    .carousel-btn.next { right: 10px; }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 10;
+    }
+    .carousel-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+      border: none;
+    }
+    .carousel-dot.active {
+      background: var(--accent);
+      transform: scale(1.3);
+    }
+
+    .card-body {
+      padding: 32px 36px;
+    }
+
+    .card-status {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .status-soon {
+      background: rgba(255,209,102,.12);
+      color: var(--accent3);
+      border: 1px solid rgba(255,209,102,.3);
+    }
+    .status-dev {
+      background: rgba(74,217,255,.1);
+      color: var(--accent2);
+      border: 1px solid rgba(74,217,255,.25);
+    }
+    .status-future {
+      background: rgba(47,230,166,.1);
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .card-desc {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: .92rem;
+      margin-bottom: 20px;
+    }
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Actions JKP */
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .gplay-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 18px;
+      border-radius: 24px;
+      background: var(--surface2);
+      border: 1px solid rgba(255,209,102,.35);
+      color: var(--accent3);
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+    .gplay-chip::before {
+      content: '▶';
+      font-size: .7rem;
+      color: var(--accent);
+    }
+    .tester-link {
+      color: var(--accent);
+      font-size: .86rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 2px;
+      transition: color .2s, border-color .2s;
+    }
+    .tester-link:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+    .tag {
+      padding: 3px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: .72rem;
+      color: var(--muted);
+    }
+
+    /* Placeholder cards */
+    .project-card.placeholder {
+      border-style: dashed;
+      border-color: rgba(47,230,166,.15);
+      background: rgba(47,230,166,.03);
+    }
+    .placeholder-inner {
+      padding: 52px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 12px;
+      color: var(--muted);
+    }
+    .placeholder-icon {
+      font-size: 2rem;
+      opacity: .4;
+    }
+    .placeholder-gif {
+      width: 76px;
+      opacity: .85;
+      animation: floatLogo 3.5s ease-in-out infinite;
+    }
+    .placeholder-text {
+      font-size: .85rem;
+      font-style: italic;
+      opacity: .6;
+    }
+
+    /* ─── ABOUT ─────────────────────────────────────────────────── */
+    #about .section-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    @media (max-width: 720px) {
+      #about .section-inner { grid-template-columns: 1fr; }
+    }
+
+    .about-logo-wrap {
+      display: flex;
+      justify-content: center;
+    }
+    .about-logo-wrap img {
+      width: min(300px, 80vw);
+      filter: drop-shadow(0 0 32px var(--glow));
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: .95rem;
+      margin-bottom: 16px;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    /* Kanji en filigrane */
+    #about { overflow: hidden; }
+    .about-kanji {
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: clamp(9rem, 26vw, 20rem);
+      font-weight: 900;
+      color: var(--accent);
+      opacity: .045;
+      line-height: 1;
+      writing-mode: vertical-rl;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ─── DIVIDER ───────────────────────────────────────────────── */
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      margin: 20px 0 32px;
+    }
+
+    /* ─── CONTACT ──────────────────────────────────────────────── */
+    #contact {
+      text-align: center;
+    }
+
+    .contact-box {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .contact-box p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-align: left;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 13px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: .92rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: var(--muted); }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(47,230,166,.15);
+    }
+
+    .contact-form textarea { resize: vertical; min-height: 130px; }
+
+    .contact-submit {
+      padding: 13px 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 30px;
+      color: #fff;
+      font-weight: 700;
+      font-size: .95rem;
+      letter-spacing: .05em;
+      cursor: pointer;
+      box-shadow: 0 0 20px var(--glow);
+      transition: transform .2s, box-shadow .2s;
+      align-self: center;
+    }
+    .contact-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 36px var(--glow);
+    }
+
+    /* ─── FOOTER ────────────────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 36px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-logo img { height: 28px; opacity: .7; }
+    .footer-logo span { font-size: .82rem; color: var(--muted); font-weight: 600; }
+    .footer-copy { font-size: .78rem; color: var(--muted); opacity: .6; }
+    .footer-links a {
+      color: var(--muted);
+      font-size: .8rem;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ─── FADE-IN ANIMATION ─────────────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── ACCESSIBILITÉ ─────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAV ─────────────────────────────────────────────────── -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <img src="assets/PtitLogoHimitsuLabs.png" alt="Himitsu Labs" />
+      <span>Himitsu Labs</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#projects" data-fr="Projets" data-en="Projects">Projets</a></li>
+      <li><a href="#about" data-fr="À propos" data-en="About">À propos</a></li>
+      <li><a href="#contact" data-fr="Contact" data-en="Contact">Contact</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btn-fr" onclick="setLang('fr')">FR</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="burger" id="burger" aria-label="Menu" onclick="toggleMenu()">☰</button>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-bg" id="hero-bg" aria-hidden="true">
+      <span style="top:16%; left:8%;  font-size:3.4rem;">✊</span>
+      <span style="top:64%; left:14%; font-size:2.6rem;">✋</span>
+      <span style="top:30%; left:87%; font-size:3rem;">✌</span>
+      <span style="top:74%; left:82%; font-size:2.4rem;">秘</span>
+      <span style="top:12%; left:70%; font-size:2.2rem;">密</span>
+      <span style="top:82%; left:45%; font-size:2rem;">✊</span>
+    </div>
+    <img class="hero-logo" src="assets/HimitsuLabs.png" alt="Himitsu Labs" />
+    <p class="hero-tagline" data-fr="Indie Game Studio" data-en="Indie Game Studio">Indie Game Studio</p>
+    <h1 class="hero-title" data-fr="Nous créons des jeux avec passion." data-en="We make games with passion.">Nous créons des jeux avec passion.</h1>
+    <p class="hero-sub"
+       data-fr="Himitsu Labs est un studio indépendant passionné par la création de jeux originaux, amusants et mémorables. Notre premier projet arrive bientôt."
+       data-en="Himitsu Labs is an indie studio passionate about creating original, fun, and memorable games. Our first project is coming soon.">
+      Himitsu Labs est un studio indépendant passionné par la création de jeux originaux, amusants et mémorables. Notre premier projet arrive bientôt.
+    </p>
+    <a href="#projects" class="hero-cta" data-fr="Voir nos projets" data-en="See our projects">Voir nos projets</a>
+    <div class="scroll-hint" data-fr="Défiler" data-en="Scroll">Défiler</div>
+  </section>
+
+  <!-- ─── PROJECTS ─────────────────────────────────────────────── -->
+  <section id="projects">
+    <div class="section-inner">
+      <p class="section-label" data-fr="Nos créations" data-en="Our creations">Nos créations</p>
+      <h2 class="section-title" data-fr="Projets" data-en="Projects">Projets</h2>
+
+      <div class="projects-grid">
+
+        <!-- JKP — Featured card -->
+        <div class="project-card featured fade-in">
+          <div class="card-visual">
+            <div class="carousel" id="jkp-carousel">
+              <div class="carousel-track" id="jkp-track">
+                <div class="carousel-slide"><img src="assets/screen1.png" alt="Jan Ken Panic — Titre" /></div>
+                <div class="carousel-slide"><img src="assets/screen4.png" alt="Jan Ken Panic — Gameplay" /></div>
+                <div class="carousel-slide"><img src="assets/screen5.png" alt="Jan Ken Panic — Gameplay" /></div>
+                <div class="carousel-slide"><img src="assets/screen3.png" alt="Jan Ken Panic — Bonus" /></div>
+                <div class="carousel-slide"><img src="assets/screen2.png" alt="Jan Ken Panic — Round Clear" /></div>
+              </div>
+              <button class="carousel-btn prev" onclick="carouselMove(-1)">‹</button>
+              <button class="carousel-btn next" onclick="carouselMove(1)">›</button>
+              <div class="carousel-dots" id="jkp-dots">
+                <button class="carousel-dot active" onclick="carouselGo(0)"></button>
+                <button class="carousel-dot" onclick="carouselGo(1)"></button>
+                <button class="carousel-dot" onclick="carouselGo(2)"></button>
+                <button class="carousel-dot" onclick="carouselGo(3)"></button>
+                <button class="carousel-dot" onclick="carouselGo(4)"></button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-status status-soon" data-fr="Sortie prochaine" data-en="Coming soon">Sortie prochaine</span>
+            <h3 class="card-title">Jan Ken Panic</h3>
+            <p class="card-desc"
+               data-fr="Un jeu solo qui demande de la dextérité, inspiré du Janken (pierre-feuille-ciseaux) japonais. Enchaîne les bonnes combinaisons le plus vite possible, bats ton propre record — et partage ton score avec tes amis pour encore plus de challenge !"
+               data-en="A solo dexterity game inspired by Japanese Janken (rock-paper-scissors). Chain the right combinations as fast as you can, beat your own record — and share your score with friends for even more challenge!">
+              Un jeu solo qui demande de la dextérité, inspiré du Janken (pierre-feuille-ciseaux) japonais. Enchaîne les bonnes combinaisons le plus vite possible, bats ton propre record — et partage ton score avec tes amis pour encore plus de challenge !
+            </p>
+            <div class="card-tags">
+              <span class="tag">Arcade</span>
+              <span class="tag">Unity</span>
+              <span class="tag" data-fr="Solo" data-en="Solo">Solo</span>
+              <span class="tag" data-fr="Dextérité" data-en="Dexterity">Dextérité</span>
+              <span class="tag" data-fr="Partage de scores" data-en="Score sharing">Partage de scores</span>
+              <span class="tag" data-fr="Tout public" data-en="All ages">Tout public</span>
+              <span class="tag" style="color:var(--accent);border-color:var(--border);" data-fr="Mode Endless à venir" data-en="Endless mode coming">Mode Endless à venir</span>
+            </div>
+            <div class="card-actions">
+              <span class="gplay-chip" data-fr="Bientôt sur Google Play" data-en="Coming soon on Google Play">Bientôt sur Google Play</span>
+              <a href="#contact" class="tester-link" data-fr="Devenir testeur →" data-en="Become a tester →">Devenir testeur →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Placeholder 1 -->
+        <div class="project-card placeholder fade-in">
+          <div class="placeholder-inner">
+            <div class="placeholder-icon">🎮</div>
+            <span class="card-status status-dev" data-fr="En développement" data-en="In development">En développement</span>
+            <p class="placeholder-text" data-fr="Prochain projet — à venir" data-en="Next project — coming soon">Prochain projet — à venir</p>
+          </div>
+        </div>
+
+        <!-- Placeholder 2 -->
+        <div class="project-card placeholder fade-in">
+          <div class="placeholder-inner">
+            <img class="placeholder-gif" src="assets/jkp-logo.gif" alt="?" loading="lazy" />
+            <span class="card-status status-future" data-fr="À l'horizon" data-en="On the horizon">À l'horizon</span>
+            <p class="placeholder-text" data-fr="Projet futur — mystère total" data-en="Future project — total mystery">Projet futur — mystère total</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ABOUT ─────────────────────────────────────────────────── -->
+  <section id="about" style="background: var(--surface);">
+    <div class="about-kanji" aria-hidden="true">秘密</div>
+    <div class="section-inner">
+      <div class="about-logo-wrap fade-in">
+        <img src="assets/HimitsuLabs.png" alt="Himitsu Labs" />
+      </div>
+      <div class="about-text fade-in">
+        <p class="section-label" data-fr="Qui sommes-nous ?" data-en="Who are we?">Qui sommes-nous ?</p>
+        <h2 class="section-title" data-fr="À propos de Himitsu Labs" data-en="About Himitsu Labs">À propos de Himitsu Labs</h2>
+        <div class="divider"></div>
+        <p data-fr="Himitsu Labs (秘密 — « secret » en japonais) est un studio de développement indépendant animé par la passion du jeu vidéo. Nous concevons des expériences ludiques originales, avec soin et créativité."
+           data-en="Himitsu Labs (秘密 — 'secret' in Japanese) is an indie game development studio driven by a passion for video games. We craft original, fun experiences with care and creativity.">
+          Himitsu Labs (秘密 — « secret » en japonais) est un studio de développement indépendant animé par la passion du jeu vidéo. Nous concevons des expériences ludiques originales, avec soin et créativité.
+        </p>
+        <p data-fr="Notre premier projet, Jan Ken Panic, est le reflet de notre amour pour les jeux d'arcade et la culture japonaise. C'est la première pierre d'une aventure qui ne fait que commencer."
+           data-en="Our first project, Jan Ken Panic, reflects our love for arcade games and Japanese culture. It's the first step in an adventure that's just getting started.">
+          Notre premier projet, Jan Ken Panic, est le reflet de notre amour pour les jeux d'arcade et la culture japonaise. C'est la première pierre d'une aventure qui ne fait que commencer.
+        </p>
+        <p data-fr="Ce site sera mis à jour à chaque nouvelle sortie, chaque avancement de projet. Restez à l'écoute — il se passe des choses dans le labo 🔬"
+           data-en="This site will be updated with every new release and project milestone. Stay tuned — things are happening in the lab 🔬">
+          Ce site sera mis à jour à chaque nouvelle sortie, chaque avancement de projet. Restez à l'écoute — il se passe des choses dans le labo 🔬
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ────────────────────────────────────────────────── -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label" data-fr="Nous écrire" data-en="Get in touch">Nous écrire</p>
+      <h2 class="section-title" data-fr="Contact" data-en="Contact">Contact</h2>
+      <div class="contact-box fade-in">
+        <p data-fr="Une question, une collaboration, un retour sur un jeu ? Nous sommes là. Écris-nous et nous te répondrons dès que possible."
+           data-en="A question, a collaboration, feedback on a game? We're here. Write to us and we'll get back to you as soon as possible.">
+          Une question, une collaboration, un retour sur un jeu ? Nous sommes là. Écris-nous et nous te répondrons dès que possible.
+        </p>
+        <form class="contact-form" id="contact-form" onsubmit="submitContact(event)">
+          <input type="text" name="name" placeholder="Nom / Name" required />
+          <input type="email" name="email" placeholder="Email" required />
+          <textarea name="message" placeholder="Message..." required></textarea>
+          <button type="submit" class="contact-submit" id="contact-btn" data-fr="Envoyer" data-en="Send">Envoyer</button>
+          <p id="contact-feedback" style="text-align:center;font-size:.88rem;display:none;"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─────────────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-logo">
+      <img src="assets/PtitLogoHimitsuLabs.png" alt="Himitsu Labs" />
+      <span>Himitsu Labs</span>
+    </div>
+    <div class="footer-links">
+      <a id="privacy-link" href="confidentialite.html" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+    </div>
+    <p class="footer-copy" id="footer-copy">© 2026 Himitsu Labs. Tous droits réservés.</p>
+  </footer>
+
+  <!-- ─── SCRIPTS ─────────────────────────────────────────────────── -->
+  <script>
+    // ── Language toggle ──────────────────────────────────────────
+    let currentLang = 'fr';
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+      document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+        el.textContent = el.dataset[lang];
+      });
+
+      document.getElementById('footer-copy').textContent =
+        lang === 'fr'
+          ? '© 2026 Himitsu Labs. Tous droits réservés.'
+          : '© 2026 Himitsu Labs. All rights reserved.';
+
+      document.getElementById('privacy-link').href =
+        lang === 'fr' ? 'confidentialite.html' : 'privacy.html';
+
+      try { localStorage.setItem('himitsu-lang', lang); } catch {}
+    }
+
+    // Restaure la langue choisie
+    try {
+      const saved = localStorage.getItem('himitsu-lang');
+      if (saved === 'en') setLang('en');
+    } catch {}
+
+    // ── Menu mobile ──────────────────────────────────────────────
+    function toggleMenu() {
+      document.querySelector('.nav-links').classList.toggle('open');
+    }
+    document.querySelectorAll('.nav-links a').forEach(a =>
+      a.addEventListener('click', () =>
+        document.querySelector('.nav-links').classList.remove('open')));
+
+    // ── Contact form → mini serveur local ───────────────────────
+    async function submitContact(e) {
+      e.preventDefault();
+      const btn      = document.getElementById('contact-btn');
+      const feedback = document.getElementById('contact-feedback');
+      const form     = document.getElementById('contact-form');
+      const lang     = currentLang;
+
+      btn.disabled = true;
+      btn.textContent = lang === 'fr' ? 'Envoi...' : 'Sending...';
+
+      const data = {
+        name:    form.querySelector('[name="name"]').value,
+        email:   form.querySelector('[name="email"]').value,
+        message: form.querySelector('[name="message"]').value,
+      };
+
+      try {
+        const res  = await fetch('http://localhost:3000/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const json = await res.json();
+
+        if (json.success) {
+          form.reset();
+          feedback.style.color = '#2fe6a6';
+          feedback.textContent = lang === 'fr'
+            ? '✓ Message envoyé ! On te répond bientôt.'
+            : '✓ Message sent! We\'ll get back to you soon.';
+        } else {
+          throw new Error();
+        }
+      } catch {
+        feedback.style.color = '#ff4a8d';
+        feedback.textContent = lang === 'fr'
+          ? '⚠ Erreur d\'envoi. Réessaie plus tard.'
+          : '⚠ Send error. Please try again later.';
+      }
+
+      feedback.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = lang === 'fr' ? 'Envoyer' : 'Send';
+    }
+
+    // ── Screenshot carousel ──────────────────────────────────────
+    let carouselIndex = 0;
+    const totalSlides = 5;
+
+    function carouselUpdate() {
+      document.getElementById('jkp-track').style.transform = `translateX(-${carouselIndex * 100}%)`;
+      document.querySelectorAll('.carousel-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === carouselIndex);
+      });
+    }
+
+    function carouselMove(dir) {
+      carouselIndex = (carouselIndex + dir + totalSlides) % totalSlides;
+      carouselUpdate();
+    }
+
+    function carouselGo(i) {
+      carouselIndex = i;
+      carouselUpdate();
+    }
+
+    // Auto-advance every 3.5s — pause au survol
+    let autoTimer = setInterval(() => carouselMove(1), 3500);
+    const carouselEl = document.getElementById('jkp-carousel');
+    carouselEl.addEventListener('mouseenter', () => clearInterval(autoTimer));
+    carouselEl.addEventListener('mouseleave', () => {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => carouselMove(1), 3500);
+    });
+
+    // Swipe tactile
+    let touchX = null;
+    carouselEl.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+    carouselEl.addEventListener('touchend', e => {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 40) carouselMove(dx < 0 ? 1 : -1);
+      touchX = null;
+    }, { passive: true });
+
+    // ── Parallaxe légère du hero ─────────────────────────────────
+    const heroBg = document.getElementById('hero-bg');
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduceMotion) {
+      window.addEventListener('scroll', () => {
+        heroBg.style.transform = `translateY(${window.scrollY * .25}px)`;
+      }, { passive: true });
+    }
+
+    // Apparition en cascade des cartes projets
+    document.querySelectorAll('.projects-grid .fade-in').forEach((el, i) => {
+      el.style.transitionDelay = `${i * .12}s`;
+    });
+
+    // ── Fade-in on scroll ────────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
