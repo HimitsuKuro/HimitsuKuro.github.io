@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Himitsu Labs</title>
-  <meta name="description" content="Himitsu Labs — studio de jeux vidéo indépendant. Créateur de Jan Ken Panic, jeu d'arcade inspiré du Janken japonais." />
+  <meta name="description" content="Himitsu Labs — studio de jeux vidéo indépendant. Jan Ken Panic, jeu d'arcade inspiré du Janken japonais, est disponible sur Google Play." />
   <meta name="theme-color" content="#182a21" />
   <meta property="og:title" content="Himitsu Labs — Indie Game Studio" />
   <meta property="og:description" content="Studio indépendant passionné. Découvrez Jan Ken Panic, notre jeu d'arcade inspiré du Janken japonais." />
@@ -124,30 +124,24 @@
       .nav-links.open { transform: translateY(0); }
     }
 
-    /* Language toggle */
-    .lang-toggle {
+    /* Sélecteur de langue */
+    .lang-select {
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 20px;
-      display: flex;
-      overflow: hidden;
-      cursor: pointer;
-    }
-    .lang-btn {
-      padding: 5px 14px;
-      font-size: .78rem;
+      padding: 6px 14px;
+      font-size: .8rem;
       font-weight: 700;
-      letter-spacing: .06em;
-      color: var(--muted);
+      letter-spacing: .04em;
+      color: var(--text);
       cursor: pointer;
-      transition: all .2s;
-      border: none;
-      background: transparent;
+      outline: none;
+      transition: border-color .2s;
+      appearance: none;
+      -webkit-appearance: none;
     }
-    .lang-btn.active {
-      background: var(--accent);
-      color: #fff;
-    }
+    .lang-select:hover, .lang-select:focus { border-color: var(--accent); }
+    .lang-select option { background: #14231c; color: var(--text); }
 
     /* ─── HERO ─────────────────────────────────────────────────── */
     .hero {
@@ -433,6 +427,11 @@
       color: var(--accent3);
       border: 1px solid rgba(255,209,102,.3);
     }
+    .status-live {
+      background: rgba(47,230,166,.14);
+      color: var(--accent);
+      border: 1px solid rgba(47,230,166,.4);
+    }
     .status-dev {
       background: rgba(74,217,255,.1);
       color: var(--accent2);
@@ -469,36 +468,30 @@
       margin-top: 24px;
       flex-wrap: wrap;
     }
-    .gplay-chip {
+    .gplay-btn {
       display: inline-flex;
       align-items: center;
-      gap: 9px;
-      padding: 9px 18px;
-      border-radius: 24px;
-      background: var(--surface2);
-      border: 1px solid rgba(255,209,102,.35);
-      color: var(--accent3);
-      font-size: .8rem;
-      font-weight: 700;
-      letter-spacing: .04em;
-    }
-    .gplay-chip::before {
-      content: '▶';
-      font-size: .7rem;
-      color: var(--accent);
-    }
-    .tester-link {
-      color: var(--accent);
-      font-size: .86rem;
-      font-weight: 600;
+      gap: 10px;
+      padding: 13px 26px;
+      border-radius: 14px;
+      background: #0d1a14;
+      border: 1px solid rgba(255,255,255,.16);
+      color: #fff;
       text-decoration: none;
-      border-bottom: 1px dashed var(--border);
-      padding-bottom: 2px;
-      transition: color .2s, border-color .2s;
+      font-size: .92rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
     }
-    .tester-link:hover {
-      color: var(--text);
+    .gplay-btn::before {
+      content: '▶';
+      font-size: .85rem;
+      color: var(--accent);
+    }
+    .gplay-btn:hover {
+      transform: translateY(-2px);
       border-color: var(--accent);
+      box-shadow: 0 0 24px var(--glow);
     }
     .tag {
       padding: 3px 12px;
@@ -720,15 +713,19 @@
       <span>Himitsu Labs</span>
     </a>
     <ul class="nav-links">
-      <li><a href="#projects" data-fr="Projets" data-en="Projects">Projets</a></li>
-      <li><a href="#about" data-fr="À propos" data-en="About">À propos</a></li>
-      <li><a href="#contact" data-fr="Contact" data-en="Contact">Contact</a></li>
+      <li><a href="#projects" data-i18n="nav_games">Jeux</a></li>
+      <li><a href="#about" data-i18n="nav_about">À propos</a></li>
+      <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
     </ul>
     <div style="display:flex;align-items:center;gap:10px;">
-      <div class="lang-toggle">
-        <button class="lang-btn active" id="btn-fr" onclick="setLang('fr')">FR</button>
-        <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
-      </div>
+      <select class="lang-select" id="lang-select" onchange="setLang(this.value)" aria-label="Langue">
+        <option value="fr">FR</option>
+        <option value="en">EN</option>
+        <option value="es">ES</option>
+        <option value="de">DE</option>
+        <option value="zh">中文</option>
+        <option value="ja">日本語</option>
+      </select>
       <button class="burger" id="burger" aria-label="Menu" onclick="toggleMenu()">☰</button>
     </div>
   </nav>
@@ -744,22 +741,20 @@
       <span style="top:82%; left:45%; font-size:2rem;">✊</span>
     </div>
     <img class="hero-logo" src="assets/HimitsuLabs.png" alt="Himitsu Labs" />
-    <p class="hero-tagline" data-fr="Indie Game Studio" data-en="Indie Game Studio">Indie Game Studio</p>
-    <h1 class="hero-title" data-fr="Nous créons des jeux avec passion." data-en="We make games with passion.">Nous créons des jeux avec passion.</h1>
-    <p class="hero-sub"
-       data-fr="Himitsu Labs est un studio indépendant passionné par la création de jeux originaux, amusants et mémorables. Notre premier projet arrive bientôt."
-       data-en="Himitsu Labs is an indie studio passionate about creating original, fun, and memorable games. Our first project is coming soon.">
-      Himitsu Labs est un studio indépendant passionné par la création de jeux originaux, amusants et mémorables. Notre premier projet arrive bientôt.
+    <p class="hero-tagline" data-i18n="tagline">Indie Game Studio</p>
+    <h1 class="hero-title" data-i18n="hero_title">Nous créons des jeux avec passion.</h1>
+    <p class="hero-sub" data-i18n="hero_sub">
+      Himitsu Labs est un studio indépendant passionné par la création de jeux originaux, amusants et mémorables. Notre premier jeu, Jan Ken Panic, est disponible sur Google Play.
     </p>
-    <a href="#projects" class="hero-cta" data-fr="Voir nos projets" data-en="See our projects">Voir nos projets</a>
-    <div class="scroll-hint" data-fr="Défiler" data-en="Scroll">Défiler</div>
+    <a href="#projects" class="hero-cta" data-i18n="hero_cta">Voir nos jeux</a>
+    <div class="scroll-hint" data-i18n="scroll">Défiler</div>
   </section>
 
   <!-- ─── PROJECTS ─────────────────────────────────────────────── -->
   <section id="projects">
     <div class="section-inner">
-      <p class="section-label" data-fr="Nos créations" data-en="Our creations">Nos créations</p>
-      <h2 class="section-title" data-fr="Projets" data-en="Projects">Projets</h2>
+      <p class="section-label" data-i18n="sec_label">Nos créations</p>
+      <h2 class="section-title" data-i18n="sec_title">Jeux</h2>
 
       <div class="projects-grid">
 
@@ -786,25 +781,22 @@
             </div>
           </div>
           <div class="card-body">
-            <span class="card-status status-soon" data-fr="Sortie prochaine" data-en="Coming soon">Sortie prochaine</span>
+            <span class="card-status status-live" data-i18n="badge_live">Disponible</span>
             <h3 class="card-title">Jan Ken Panic</h3>
-            <p class="card-desc"
-               data-fr="Un jeu solo qui demande de la dextérité, inspiré du Janken (pierre-feuille-ciseaux) japonais. Enchaîne les bonnes combinaisons le plus vite possible, bats ton propre record — et partage ton score avec tes amis pour encore plus de challenge !"
-               data-en="A solo dexterity game inspired by Japanese Janken (rock-paper-scissors). Chain the right combinations as fast as you can, beat your own record — and share your score with friends for even more challenge!">
+            <p class="card-desc" data-i18n="jkp_desc">
               Un jeu solo qui demande de la dextérité, inspiré du Janken (pierre-feuille-ciseaux) japonais. Enchaîne les bonnes combinaisons le plus vite possible, bats ton propre record — et partage ton score avec tes amis pour encore plus de challenge !
             </p>
             <div class="card-tags">
               <span class="tag">Arcade</span>
               <span class="tag">Unity</span>
-              <span class="tag" data-fr="Solo" data-en="Solo">Solo</span>
-              <span class="tag" data-fr="Dextérité" data-en="Dexterity">Dextérité</span>
-              <span class="tag" data-fr="Partage de scores" data-en="Score sharing">Partage de scores</span>
-              <span class="tag" data-fr="Tout public" data-en="All ages">Tout public</span>
-              <span class="tag" style="color:var(--accent);border-color:var(--border);" data-fr="Mode Endless à venir" data-en="Endless mode coming">Mode Endless à venir</span>
+              <span class="tag" data-i18n="tag_solo">Solo</span>
+              <span class="tag" data-i18n="tag_dex">Dextérité</span>
+              <span class="tag" data-i18n="tag_share">Partage de scores</span>
+              <span class="tag" data-i18n="tag_all">Tout public</span>
+              <span class="tag" style="color:var(--accent);border-color:var(--border);" data-i18n="tag_endless">Mode Endless à venir</span>
             </div>
             <div class="card-actions">
-              <span class="gplay-chip" data-fr="Bientôt sur Google Play" data-en="Coming soon on Google Play">Bientôt sur Google Play</span>
-              <a href="#contact" class="tester-link" data-fr="Devenir testeur →" data-en="Become a tester →">Devenir testeur →</a>
+              <a class="gplay-btn" href="https://play.google.com/store/apps/details?id=com.jkp.janKenPanic" target="_blank" rel="noopener" data-i18n="gplay">Télécharger sur Google Play</a>
             </div>
           </div>
         </div>
@@ -813,8 +805,8 @@
         <div class="project-card placeholder fade-in">
           <div class="placeholder-inner">
             <div class="placeholder-icon">🎮</div>
-            <span class="card-status status-dev" data-fr="En développement" data-en="In development">En développement</span>
-            <p class="placeholder-text" data-fr="Prochain projet — à venir" data-en="Next project — coming soon">Prochain projet — à venir</p>
+            <span class="card-status status-dev" data-i18n="st_dev">En développement</span>
+            <p class="placeholder-text" data-i18n="ph1_text">Prochain projet — à venir</p>
           </div>
         </div>
 
@@ -822,8 +814,8 @@
         <div class="project-card placeholder fade-in">
           <div class="placeholder-inner">
             <img class="placeholder-gif" src="assets/jkp-logo.gif" alt="?" loading="lazy" />
-            <span class="card-status status-future" data-fr="À l'horizon" data-en="On the horizon">À l'horizon</span>
-            <p class="placeholder-text" data-fr="Projet futur — mystère total" data-en="Future project — total mystery">Projet futur — mystère total</p>
+            <span class="card-status status-future" data-i18n="st_future">À l'horizon</span>
+            <p class="placeholder-text" data-i18n="ph2_text">Projet futur — mystère total</p>
           </div>
         </div>
 
@@ -839,19 +831,16 @@
         <img src="assets/HimitsuLabs.png" alt="Himitsu Labs" />
       </div>
       <div class="about-text fade-in">
-        <p class="section-label" data-fr="Qui sommes-nous ?" data-en="Who are we?">Qui sommes-nous ?</p>
-        <h2 class="section-title" data-fr="À propos de Himitsu Labs" data-en="About Himitsu Labs">À propos de Himitsu Labs</h2>
+        <p class="section-label" data-i18n="about_label">Qui sommes-nous ?</p>
+        <h2 class="section-title" data-i18n="about_title">À propos de Himitsu Labs</h2>
         <div class="divider"></div>
-        <p data-fr="Himitsu Labs (秘密 — « secret » en japonais) est un studio de développement indépendant animé par la passion du jeu vidéo. Nous concevons des expériences ludiques originales, avec soin et créativité."
-           data-en="Himitsu Labs (秘密 — 'secret' in Japanese) is an indie game development studio driven by a passion for video games. We craft original, fun experiences with care and creativity.">
+        <p data-i18n="about_p1">
           Himitsu Labs (秘密 — « secret » en japonais) est un studio de développement indépendant animé par la passion du jeu vidéo. Nous concevons des expériences ludiques originales, avec soin et créativité.
         </p>
-        <p data-fr="Notre premier projet, Jan Ken Panic, est le reflet de notre amour pour les jeux d'arcade et la culture japonaise. C'est la première pierre d'une aventure qui ne fait que commencer."
-           data-en="Our first project, Jan Ken Panic, reflects our love for arcade games and Japanese culture. It's the first step in an adventure that's just getting started.">
-          Notre premier projet, Jan Ken Panic, est le reflet de notre amour pour les jeux d'arcade et la culture japonaise. C'est la première pierre d'une aventure qui ne fait que commencer.
+        <p data-i18n="about_p2">
+          Notre premier jeu, Jan Ken Panic, est le reflet de notre amour pour les jeux d'arcade et la culture japonaise. C'est la première pierre d'une aventure qui ne fait que commencer.
         </p>
-        <p data-fr="Ce site sera mis à jour à chaque nouvelle sortie, chaque avancement de projet. Restez à l'écoute — il se passe des choses dans le labo 🔬"
-           data-en="This site will be updated with every new release and project milestone. Stay tuned — things are happening in the lab 🔬">
+        <p data-i18n="about_p3">
           Ce site sera mis à jour à chaque nouvelle sortie, chaque avancement de projet. Restez à l'écoute — il se passe des choses dans le labo 🔬
         </p>
       </div>
@@ -861,18 +850,17 @@
   <!-- ─── CONTACT ────────────────────────────────────────────────── -->
   <section id="contact">
     <div class="section-inner">
-      <p class="section-label" data-fr="Nous écrire" data-en="Get in touch">Nous écrire</p>
-      <h2 class="section-title" data-fr="Contact" data-en="Contact">Contact</h2>
+      <p class="section-label" data-i18n="c_label">Nous écrire</p>
+      <h2 class="section-title" data-i18n="c_title">Contact</h2>
       <div class="contact-box fade-in">
-        <p data-fr="Une question, une collaboration, un retour sur un jeu ? Nous sommes là. Écris-nous et nous te répondrons dès que possible."
-           data-en="A question, a collaboration, feedback on a game? We're here. Write to us and we'll get back to you as soon as possible.">
+        <p data-i18n="c_p">
           Une question, une collaboration, un retour sur un jeu ? Nous sommes là. Écris-nous et nous te répondrons dès que possible.
         </p>
         <form class="contact-form" id="contact-form" onsubmit="submitContact(event)">
-          <input type="text" name="name" placeholder="Nom / Name" required />
+          <input type="text" name="name" id="in-name" placeholder="Nom" required />
           <input type="email" name="email" placeholder="Email" required />
-          <textarea name="message" placeholder="Message..." required></textarea>
-          <button type="submit" class="contact-submit" id="contact-btn" data-fr="Envoyer" data-en="Send">Envoyer</button>
+          <textarea name="message" id="in-msg" placeholder="Message..." required></textarea>
+          <button type="submit" class="contact-submit" id="contact-btn" data-i18n="c_send">Envoyer</button>
           <p id="contact-feedback" style="text-align:center;font-size:.88rem;display:none;"></p>
         </form>
       </div>
@@ -886,41 +874,192 @@
       <span>Himitsu Labs</span>
     </div>
     <div class="footer-links">
-      <a id="privacy-link" href="confidentialite.html" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+      <a id="privacy-link" href="confidentialite.html" data-i18n="privacy">Confidentialité</a>
     </div>
     <p class="footer-copy" id="footer-copy">© 2026 Himitsu Labs. Tous droits réservés.</p>
   </footer>
 
   <!-- ─── SCRIPTS ─────────────────────────────────────────────────── -->
   <script>
-    // ── Language toggle ──────────────────────────────────────────
+    // ── Traductions (6 langues) ──────────────────────────────────
+    const I18N = {
+      fr: {
+        nav_games:'Jeux', nav_about:'À propos', nav_contact:'Contact',
+        tagline:'Indie Game Studio',
+        hero_title:'Nous créons des jeux avec passion.',
+        hero_sub:'Himitsu Labs est un studio indépendant passionné par la création de jeux originaux, amusants et mémorables. Notre premier jeu, Jan Ken Panic, est disponible sur Google Play.',
+        hero_cta:'Voir nos jeux', scroll:'Défiler',
+        sec_label:'Nos créations', sec_title:'Jeux',
+        badge_live:'Disponible',
+        jkp_desc:'Un jeu solo qui demande de la dextérité, inspiré du Janken (pierre-feuille-ciseaux) japonais. Enchaîne les bonnes combinaisons le plus vite possible, bats ton propre record — et partage ton score avec tes amis pour encore plus de challenge !',
+        tag_solo:'Solo', tag_dex:'Dextérité', tag_share:'Partage de scores', tag_all:'Tout public', tag_endless:'Mode Endless à venir',
+        gplay:'Télécharger sur Google Play',
+        st_dev:'En développement', ph1_text:'Prochain projet — à venir',
+        st_future:"À l'horizon", ph2_text:'Projet futur — mystère total',
+        about_label:'Qui sommes-nous ?', about_title:'À propos de Himitsu Labs',
+        about_p1:'Himitsu Labs (秘密 — « secret » en japonais) est un studio de développement indépendant animé par la passion du jeu vidéo. Nous concevons des expériences ludiques originales, avec soin et créativité.',
+        about_p2:"Notre premier jeu, Jan Ken Panic, est le reflet de notre amour pour les jeux d'arcade et la culture japonaise. C'est la première pierre d'une aventure qui ne fait que commencer.",
+        about_p3:"Ce site sera mis à jour à chaque nouvelle sortie, chaque avancement de projet. Restez à l'écoute — il se passe des choses dans le labo 🔬",
+        c_label:'Nous écrire', c_title:'Contact',
+        c_p:'Une question, une collaboration, un retour sur un jeu ? Nous sommes là. Écris-nous et nous te répondrons dès que possible.',
+        c_send:'Envoyer', privacy:'Confidentialité',
+        copy:'© 2026 Himitsu Labs. Tous droits réservés.',
+        ph_name:'Nom', ph_msg:'Message...',
+        m_sending:'Envoi...', m_ok:'✓ Message envoyé ! On te répond bientôt.', m_err:"⚠ Erreur d'envoi. Réessaie plus tard."
+      },
+      en: {
+        nav_games:'Games', nav_about:'About', nav_contact:'Contact',
+        tagline:'Indie Game Studio',
+        hero_title:'We make games with passion.',
+        hero_sub:'Himitsu Labs is an indie studio passionate about creating original, fun, and memorable games. Our first game, Jan Ken Panic, is out now on Google Play.',
+        hero_cta:'See our games', scroll:'Scroll',
+        sec_label:'Our creations', sec_title:'Games',
+        badge_live:'Out now',
+        jkp_desc:'A solo dexterity game inspired by Japanese Janken (rock-paper-scissors). Chain the right combinations as fast as you can, beat your own record — and share your score with friends for even more challenge!',
+        tag_solo:'Solo', tag_dex:'Dexterity', tag_share:'Score sharing', tag_all:'All ages', tag_endless:'Endless mode coming',
+        gplay:'Get it on Google Play',
+        st_dev:'In development', ph1_text:'Next project — coming soon',
+        st_future:'On the horizon', ph2_text:'Future project — total mystery',
+        about_label:'Who are we?', about_title:'About Himitsu Labs',
+        about_p1:"Himitsu Labs (秘密 — 'secret' in Japanese) is an indie game development studio driven by a passion for video games. We craft original, fun experiences with care and creativity.",
+        about_p2:"Our first game, Jan Ken Panic, reflects our love for arcade games and Japanese culture. It's the first step in an adventure that's just getting started.",
+        about_p3:'This site will be updated with every new release and project milestone. Stay tuned — things are happening in the lab 🔬',
+        c_label:'Get in touch', c_title:'Contact',
+        c_p:"A question, a collaboration, feedback on a game? We're here. Write to us and we'll get back to you as soon as possible.",
+        c_send:'Send', privacy:'Privacy',
+        copy:'© 2026 Himitsu Labs. All rights reserved.',
+        ph_name:'Name', ph_msg:'Message...',
+        m_sending:'Sending...', m_ok:"✓ Message sent! We'll get back to you soon.", m_err:'⚠ Send error. Please try again later.'
+      },
+      es: {
+        nav_games:'Juegos', nav_about:'Acerca de', nav_contact:'Contacto',
+        tagline:'Estudio de juegos indie',
+        hero_title:'Creamos juegos con pasión.',
+        hero_sub:'Himitsu Labs es un estudio independiente apasionado por crear juegos originales, divertidos y memorables. Nuestro primer juego, Jan Ken Panic, ya está disponible en Google Play.',
+        hero_cta:'Ver nuestros juegos', scroll:'Desplázate',
+        sec_label:'Nuestras creaciones', sec_title:'Juegos',
+        badge_live:'Ya disponible',
+        jkp_desc:'Un juego en solitario que exige destreza, inspirado en el Janken japonés (piedra, papel o tijera). Encadena las combinaciones correctas lo más rápido posible, bate tu propio récord y comparte tu puntuación con tus amigos. ¡Más desafío!',
+        tag_solo:'Un jugador', tag_dex:'Destreza', tag_share:'Comparte puntuaciones', tag_all:'Para todos', tag_endless:'Modo Endless próximamente',
+        gplay:'Disponible en Google Play',
+        st_dev:'En desarrollo', ph1_text:'Próximo proyecto — muy pronto',
+        st_future:'En el horizonte', ph2_text:'Proyecto futuro — misterio total',
+        about_label:'¿Quiénes somos?', about_title:'Acerca de Himitsu Labs',
+        about_p1:'Himitsu Labs (秘密, «secreto» en japonés) es un estudio independiente de desarrollo de videojuegos impulsado por la pasión. Diseñamos experiencias lúdicas originales, con cuidado y creatividad.',
+        about_p2:'Nuestro primer juego, Jan Ken Panic, refleja nuestro amor por los juegos arcade y la cultura japonesa. Es el primer paso de una aventura que apenas comienza.',
+        about_p3:'Este sitio se actualizará con cada lanzamiento y avance de proyecto. Mantente atento: pasan cosas en el laboratorio 🔬',
+        c_label:'Escríbenos', c_title:'Contacto',
+        c_p:'¿Una pregunta, una colaboración, una opinión sobre un juego? Estamos aquí. Escríbenos y te responderemos lo antes posible.',
+        c_send:'Enviar', privacy:'Privacidad',
+        copy:'© 2026 Himitsu Labs. Todos los derechos reservados.',
+        ph_name:'Nombre', ph_msg:'Mensaje...',
+        m_sending:'Enviando...', m_ok:'✓ ¡Mensaje enviado! Te responderemos pronto.', m_err:'⚠ Error de envío. Inténtalo más tarde.'
+      },
+      de: {
+        nav_games:'Spiele', nav_about:'Über uns', nav_contact:'Kontakt',
+        tagline:'Indie-Spielestudio',
+        hero_title:'Wir machen Spiele mit Leidenschaft.',
+        hero_sub:'Himitsu Labs ist ein unabhängiges Studio mit Leidenschaft für originelle, unterhaltsame und unvergessliche Spiele. Unser erstes Spiel, Jan Ken Panic, ist jetzt auf Google Play erhältlich.',
+        hero_cta:'Unsere Spiele ansehen', scroll:'Scrollen',
+        sec_label:'Unsere Kreationen', sec_title:'Spiele',
+        badge_live:'Jetzt erhältlich',
+        jkp_desc:'Ein Solo-Geschicklichkeitsspiel, inspiriert vom japanischen Janken (Schere, Stein, Papier). Reihe die richtigen Kombinationen so schnell wie möglich aneinander, brich deinen eigenen Rekord — und teile deinen Punktestand mit Freunden!',
+        tag_solo:'Solo', tag_dex:'Geschicklichkeit', tag_share:'Score teilen', tag_all:'Für alle', tag_endless:'Endless-Modus kommt bald',
+        gplay:'Jetzt bei Google Play',
+        st_dev:'In Entwicklung', ph1_text:'Nächstes Projekt — bald',
+        st_future:'Am Horizont', ph2_text:'Zukünftiges Projekt — streng geheim',
+        about_label:'Wer sind wir?', about_title:'Über Himitsu Labs',
+        about_p1:'Himitsu Labs (秘密 — „Geheimnis" auf Japanisch) ist ein unabhängiges Spielestudio, angetrieben von der Leidenschaft für Videospiele. Wir gestalten originelle Spielerlebnisse mit Sorgfalt und Kreativität.',
+        about_p2:'Unser erstes Spiel, Jan Ken Panic, spiegelt unsere Liebe zu Arcade-Spielen und zur japanischen Kultur wider. Es ist der erste Schritt eines Abenteuers, das gerade erst beginnt.',
+        about_p3:'Diese Seite wird mit jeder Veröffentlichung und jedem Projektfortschritt aktualisiert. Bleib dran — im Labor tut sich was 🔬',
+        c_label:'Schreib uns', c_title:'Kontakt',
+        c_p:'Eine Frage, eine Zusammenarbeit, Feedback zu einem Spiel? Wir sind da. Schreib uns und wir melden uns so schnell wie möglich.',
+        c_send:'Senden', privacy:'Datenschutz',
+        copy:'© 2026 Himitsu Labs. Alle Rechte vorbehalten.',
+        ph_name:'Name', ph_msg:'Nachricht...',
+        m_sending:'Wird gesendet...', m_ok:'✓ Nachricht gesendet! Wir melden uns bald.', m_err:'⚠ Sendefehler. Bitte später erneut versuchen.'
+      },
+      zh: {
+        nav_games:'游戏', nav_about:'关于', nav_contact:'联系',
+        tagline:'独立游戏工作室',
+        hero_title:'我们用热情创造游戏。',
+        hero_sub:'Himitsu Labs 是一家热衷于创造原创、有趣、难忘游戏的独立工作室。我们的首款游戏《Jan Ken Panic》现已登陆 Google Play。',
+        hero_cta:'查看我们的游戏', scroll:'滑动',
+        sec_label:'我们的作品', sec_title:'游戏',
+        badge_live:'现已推出',
+        jkp_desc:'一款考验手速的单人游戏，灵感来自日本的猜拳（石头剪刀布）。尽快连出正确组合，打破自己的纪录，并与朋友分享你的分数，挑战更进一步！',
+        tag_solo:'单人', tag_dex:'手速', tag_share:'分数分享', tag_all:'全年龄', tag_endless:'无尽模式即将推出',
+        gplay:'在 Google Play 下载',
+        st_dev:'开发中', ph1_text:'下一个项目 — 敬请期待',
+        st_future:'远景', ph2_text:'未来项目 — 完全保密',
+        about_label:'我们是谁？', about_title:'关于 Himitsu Labs',
+        about_p1:'Himitsu Labs（秘密，日语意为「秘密」）是一家由热情驱动的独立游戏开发工作室。我们用心和创意打造原创游戏体验。',
+        about_p2:'我们的首款游戏《Jan Ken Panic》体现了我们对街机游戏和日本文化的热爱。这只是一段冒险旅程的第一步。',
+        about_p3:'本网站会随每次新发布和项目进展而更新。敬请关注——实验室里正在发生一些事情 🔬',
+        c_label:'联系我们', c_title:'联系',
+        c_p:'有问题、想合作，或想反馈游戏体验？我们在这里。给我们写信，我们会尽快回复。',
+        c_send:'发送', privacy:'隐私政策',
+        copy:'© 2026 Himitsu Labs. 版权所有。',
+        ph_name:'姓名', ph_msg:'留言...',
+        m_sending:'发送中...', m_ok:'✓ 消息已发送！我们会尽快回复。', m_err:'⚠ 发送失败，请稍后再试。'
+      },
+      ja: {
+        nav_games:'ゲーム', nav_about:'私たちについて', nav_contact:'お問い合わせ',
+        tagline:'インディーゲームスタジオ',
+        hero_title:'情熱を込めてゲームを作っています。',
+        hero_sub:'Himitsu Labsは、オリジナルで楽しく心に残るゲーム作りに情熱を注ぐインディースタジオです。初作品『Jan Ken Panic』がGoogle Playで配信中！',
+        hero_cta:'ゲームを見る', scroll:'スクロール',
+        sec_label:'作品', sec_title:'ゲーム',
+        badge_live:'配信中',
+        jkp_desc:'日本のじゃんけんから生まれた、腕前が試されるソロゲーム。正しい組み合わせを素早くつなげて自己ベストを更新し、スコアを友達とシェアしよう！',
+        tag_solo:'ソロ', tag_dex:'瞬発力', tag_share:'スコア共有', tag_all:'全年齢', tag_endless:'エンドレスモード近日登場',
+        gplay:'Google Play で手に入れよう',
+        st_dev:'開発中', ph1_text:'次回作 — 近日公開',
+        st_future:'構想中', ph2_text:'未来のプロジェクト — 完全な秘密',
+        about_label:'私たちについて', about_title:'Himitsu Labsについて',
+        about_p1:'Himitsu Labs（秘密）は、ゲームへの情熱を原動力とするインディーゲーム開発スタジオです。心を込めて、独創的な遊び体験をデザインしています。',
+        about_p2:'初作品『Jan Ken Panic』には、アーケードゲームと日本文化への愛が詰まっています。これは始まったばかりの冒険の第一歩です。',
+        about_p3:'このサイトはリリースやプロジェクトの進展ごとに更新されます。お楽しみに——ラボでは何かが起きています 🔬',
+        c_label:'お便り', c_title:'お問い合わせ',
+        c_p:'ご質問、コラボのご相談、ゲームのご感想など、お気軽にどうぞ。できるだけ早くお返事します。',
+        c_send:'送信', privacy:'プライバシー',
+        copy:'© 2026 Himitsu Labs. All rights reserved.',
+        ph_name:'お名前', ph_msg:'メッセージ...',
+        m_sending:'送信中...', m_ok:'✓ メッセージを送信しました！近日中にお返事します。', m_err:'⚠ 送信エラー。後でもう一度お試しください。'
+      }
+    };
+
     let currentLang = 'fr';
 
     function setLang(lang) {
+      if (!I18N[lang]) lang = 'fr';
       currentLang = lang;
-      document.documentElement.lang = lang;
-      document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
-      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+      const t = I18N[lang];
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
 
-      document.querySelectorAll('[data-fr][data-en]').forEach(el => {
-        el.textContent = el.dataset[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const k = el.dataset.i18n;
+        if (t[k] !== undefined) el.textContent = t[k];
       });
 
-      document.getElementById('footer-copy').textContent =
-        lang === 'fr'
-          ? '© 2026 Himitsu Labs. Tous droits réservés.'
-          : '© 2026 Himitsu Labs. All rights reserved.';
-
+      document.getElementById('in-name').placeholder = t.ph_name;
+      document.getElementById('in-msg').placeholder = t.ph_msg;
+      document.getElementById('footer-copy').textContent = t.copy;
       document.getElementById('privacy-link').href =
         lang === 'fr' ? 'confidentialite.html' : 'privacy.html';
+      document.getElementById('lang-select').value = lang;
 
       try { localStorage.setItem('himitsu-lang', lang); } catch {}
     }
 
-    // Restaure la langue choisie
+    // Restaure la langue choisie (ou celle du navigateur)
     try {
       const saved = localStorage.getItem('himitsu-lang');
-      if (saved === 'en') setLang('en');
+      if (saved && saved !== 'fr' && I18N[saved]) setLang(saved);
+      else if (!saved) {
+        const nav = (navigator.language || 'fr').slice(0,2);
+        if (nav !== 'fr' && I18N[nav]) setLang(nav);
+      }
     } catch {}
 
     // ── Menu mobile ──────────────────────────────────────────────
@@ -937,10 +1076,10 @@
       const btn      = document.getElementById('contact-btn');
       const feedback = document.getElementById('contact-feedback');
       const form     = document.getElementById('contact-form');
-      const lang     = currentLang;
+      const t = I18N[currentLang];
 
       btn.disabled = true;
-      btn.textContent = lang === 'fr' ? 'Envoi...' : 'Sending...';
+      btn.textContent = t.m_sending;
 
       const data = {
         name:    form.querySelector('[name="name"]').value,
@@ -959,22 +1098,18 @@
         if (json.success) {
           form.reset();
           feedback.style.color = '#2fe6a6';
-          feedback.textContent = lang === 'fr'
-            ? '✓ Message envoyé ! On te répond bientôt.'
-            : '✓ Message sent! We\'ll get back to you soon.';
+          feedback.textContent = t.m_ok;
         } else {
           throw new Error();
         }
       } catch {
         feedback.style.color = '#ff4a8d';
-        feedback.textContent = lang === 'fr'
-          ? '⚠ Erreur d\'envoi. Réessaie plus tard.'
-          : '⚠ Send error. Please try again later.';
+        feedback.textContent = t.m_err;
       }
 
       feedback.style.display = 'block';
       btn.disabled = false;
-      btn.textContent = lang === 'fr' ? 'Envoyer' : 'Send';
+      btn.textContent = t.c_send;
     }
 
     // ── Screenshot carousel ──────────────────────────────────────
